@@ -20,8 +20,29 @@ router.get('/getMembers', function (req, res, next) {
         });
 });
 
-router.get('/getMember', function (req, res, next) {
-    memberData.find({name: req.query.name}).exec(function (err, doc) {
+router.get('/getMemberName', function (req, res, next) {
+    memberData.findOne({name: req.query.name}).exec(function (err, doc) {
+        if (err) {
+            res.send({error: 'Error fetching data'});
+            res.end();
+            return;
+        }
+        if (!doc) {
+            res.send({error: 'Data not found'});
+        } else {
+            res.write(JSON.stringify(doc));
+        }
+        res.end();
+    });
+});
+
+router.get('/getMemberAge', function (req, res, next) {
+    memberData.find({age: req.query.age}).exec(function (err, doc) {
+        if (err) {
+            res.send({error: 'Error fetching data'});
+            res.end();
+            return;
+        }
         if (!doc.length) {
             res.send({error: 'Data not found'});
         } else {
